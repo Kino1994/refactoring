@@ -2,6 +2,7 @@ package es.damas.controllers;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,14 +26,17 @@ public class StartControllerTest {
 	@Mock
 	private View view;
 	
+	private static final int DIMENSION = 7;
+	
 	@InjectMocks
 	private StartController startController;
     
     @Test
    	public void testGivenGameAndStateWhenAcceptThenIsCorrect() {
-    	doNothing().when(view).visit(startController);
-    	startController.control(view);
-    	verify(view).visit(startController);
+    	when(game.getDimension()).thenReturn(DIMENSION);
+    	doNothing().when(view).writeMenu(DIMENSION, game);
+		startController.control(view);
+    	verify(view).writeMenu(DIMENSION, game);
    	}
     
 

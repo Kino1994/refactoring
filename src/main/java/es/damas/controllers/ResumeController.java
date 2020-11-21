@@ -21,7 +21,10 @@ public class ResumeController extends Controller {
 
 	@Override
 	public void control(View view) {
-		view.visit(this);
+        if (view.continuePlaying())
+            this.reset();
+        else
+            this.next();
 	}
 
 }

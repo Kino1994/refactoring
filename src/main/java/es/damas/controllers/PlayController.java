@@ -11,7 +11,6 @@ public class PlayController extends Controller {
 
 	private static final int MINIMUM_COORDINATES = 2;
 
-
 	public PlayController(Game game, State state) {
 		super(game, state);
 	}
@@ -41,7 +40,23 @@ public class PlayController extends Controller {
 
 	@Override
 	public void control(View view) {
-		view.visit(this);
+		Error error;
+		String input;
+        do {
+            error = null;
+            input = view.read(this.getColor());
+            if (view.isCanceledFormat(input))
+                this.cancel();
+            else if (!view.isMoveFormat(input)) {
+                error = Error.BAD_FORMAT;
+                view.writeError();
+            } else {
+                error = this.move(view.getCoordinates(input));
+                view.writeMenu(this.getDimension(), this.game);
+                if (error == null && this.isBlocked())
+                    view.writeLost();
+            }
+        } while (error != null);
 	}
 
 }

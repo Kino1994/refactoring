@@ -1,7 +1,9 @@
 package es.damas.views;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,6 +21,7 @@ import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
+import es.damas.models.Game;
 import es.damas.models.Pawn;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
@@ -44,87 +47,63 @@ public class ViewTest {
 	@Mock
     private YesNoDialog yesNoDialog;
 	
+	@Mock
+	private Game game;
+	
 	@InjectMocks
     private View view = new View();
 	
     private static final String TITTLE = "Draughts";
     
     private static final String MESSAGE = "¿Queréis jugar otra";
-    
+        
     private static final String LOST_MESSAGE = "Derrota!!! No puedes mover tus fichas!!!";
     
-    private static final String BLACK_MOVE = "Mueven las negras: ";
-    
-    private static final String WHITE_MOVE = "Mueven las blancas: ";
-    
     private static final String ERROR_MESSAGE = "Error!!! Formato incorrecto";
-    
+        
 	private static final int DIMENSION = 7;
 	
 	private static final String BLACK = "n";
 	
 	private static final String WHITE = "b";
 			
-	private static final String EMPTY = " ";			
+	private static final String EMPTY = " ";
+	
+    private static final String CANCEL_FORMAT = "-1";
 		
+    private static final String NO_CANCEL_FORMAT = "1";
+    
+    private static final String MOVEMENT_FORMAT = "11.22";
+
+    private static final String NO_MOVEMENT_FORMAT = "11.";
+            
 	@Test
-    public void testGivenStartControllerWhenVisitThenIsCorrect() {
-		doNothing().when(startController).start();
-		doNothing().when(console).writeln(TITTLE);
-		view.visit(startController);
-		verify(console).writeln(TITTLE);
-	}
-	
-	@Test
-    public void testGivenPlayControllerWhenVisitThenIsCorrect() {
-		when(playController.getColor()).thenReturn(Color.BLACK);
-		when(console.readString(BLACK_MOVE)).thenReturn("12.22");
-		when(playController.move(any(Coordinate.class))).thenReturn(null);
-		when(playController.isBlocked()).thenReturn(true);
-		view.visit(playController);
-		verify(console).writeln(LOST_MESSAGE);
-	}
-	
-	@Test
-    public void testGivenPlayControllerWhenVisitAndInteractMovementFormatIsCancelhenIsCorrect() {
-		when(playController.getColor()).thenReturn(Color.WHITE);
-		when(console.readString(WHITE_MOVE)).thenReturn("-1");
-		doNothing().when(playController).cancel();
-		view.visit(playController);
-		verify(playController).cancel();
-	}	
-	
-	@Test
-	public void testgivenPlayControllerWhenVisitAndInteractMovementFormatIsNotCorrectThenIsCorrect() {
-		when(playController.getColor()).thenReturn(Color.BLACK);
-		when(console.readString(BLACK_MOVE)).thenReturn(ERROR_MESSAGE).thenReturn("12.22");
-		when(playController.move(any(Coordinate.class))).thenReturn(null);
-		when(playController.isBlocked()).thenReturn(true);
-		view.visit(playController);
-		verify(console).writeln(LOST_MESSAGE);
-	}
-		
-	@Test
-    public void testGivenResumeControllerWhenVisitThenIsCorrect() {
-		doNothing().when(resumeController).next();
+    public void testwhencontinuePlayingThenTrue() {
 		when(yesNoDialog.read(MESSAGE)).thenReturn(true);
-		view.visit(resumeController);
-		verify(resumeController).reset();
+		assertTrue(view.continuePlaying());
+		verify(yesNoDialog).read(MESSAGE);
 	}
 	
 	@Test
-    public void testGivenResumeControllerWhenVisitThenIsNotCorrect() {
-		doNothing().when(resumeController).reset();
-		when(yesNoDialog.read(anyString())).thenReturn(false);
-		view.visit(resumeController);
-		verify(resumeController).next();
+    public void testwhencontinuePlayingThenFalse() {
+		when(yesNoDialog.read(MESSAGE)).thenReturn(false);
+		assertFalse(view.continuePlaying());
+		verify(yesNoDialog).read(MESSAGE);
 	}
 	
 	@Test
-    public void testGivenInteractorControllerWhenWriteThenViewAllBlacks() {
-		when(controller.getDimension()).thenReturn(DIMENSION);
-		when(controller.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.BLACK));
-		view.write(controller);
+	public void testwhengetCoordinatesThenIsCorrect() {
+		Coordinate [] coordinates = view.getCoordinates(MOVEMENT_FORMAT);
+		for (int i = 0; i< coordinates.length; i++) {
+			assertEquals(coordinates[i], new Coordinate(i, i));
+		}
+	}
+	
+	@Test
+    public void testgivenDimensionAndGamewhenwriteMenuThenWriteBlackBoard() {
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.BLACK));
+		view.writeMenu(DIMENSION, game);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}
@@ -134,10 +113,10 @@ public class ViewTest {
 	}
 	
 	@Test
-    public void testGivenInteractorControllerWhenWriteThenViewAllWhites() {
-		when(controller.getDimension()).thenReturn(DIMENSION);
-		when(controller.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.WHITE));
-		view.write(controller);
+    public void testgivenDimensionAndGamewhenwriteMenuThenWriteWhiteBoard() {
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.WHITE));
+		view.writeMenu(DIMENSION, game);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}
@@ -148,10 +127,10 @@ public class ViewTest {
 	
 	
 	@Test
-    public void testGivenInteractorControllerWhenWriteThenViewAllEmpty() {
-		when(controller.getDimension()).thenReturn(DIMENSION);
-		when(controller.getPiece(any(Coordinate.class))).thenReturn(null);
-		view.write(controller);
+    public void testgivenDimensionAndGamewhenwriteMenuThenWriteEmptyBoard() {
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.getPiece(any(Coordinate.class))).thenReturn(null);
+		view.writeMenu(DIMENSION, game);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}
@@ -159,7 +138,54 @@ public class ViewTest {
 		verify(console,times(2)).writeln();
 	}
 	
-    
+	
+	public void givenColorwhenreadColorThenBlack(){
+	    assertEquals(BLACK,view.read(Color.BLACK));
+	}
+	
+	public void givenColorwhenreadColorThenWhite(){
+	    assertEquals(WHITE,view.read(Color.WHITE));
+	}
+	
+	@Test
+	public void testgivenInputwhenisCanceledFormatThenTrue() {
+		assertTrue(view.isCanceledFormat(CANCEL_FORMAT));
+	}
+	
+	@Test
+	public void testgivenInputwhenisCanceledFormatThenFalse() {
+		assertFalse(view.isCanceledFormat(NO_CANCEL_FORMAT));
+	}
 
+	@Test
+	public void testwhenisMoveFormatThenTrue() {
+		assertTrue(view.isMoveFormat(MOVEMENT_FORMAT));
+	}
+	
+	@Test
+	public void testwhenisMoveFormatThenFalse() {
+		assertFalse(view.isMoveFormat(NO_MOVEMENT_FORMAT));
+	}
+
+	@Test
+	public void testwhenwriteErrorThenisCorrect(){
+		doNothing().when(console).writeln(ERROR_MESSAGE);
+		view.writeError();
+		verify(console).writeln(ERROR_MESSAGE);
+	}
+
+	@Test
+	public void testwhenwriteLostThenisCorrect() {
+		doNothing().when(console).writeln(LOST_MESSAGE);
+		view.writeLost();
+		verify(console).writeln(LOST_MESSAGE);
+	}
+	
+	@Test
+	public void testwhenwriteTittleThenisCorrect() {
+		doNothing().when(console).writeln(TITTLE);
+		view.writeTittle();
+		verify(console).writeln(TITTLE);
+	}	
 	
 }

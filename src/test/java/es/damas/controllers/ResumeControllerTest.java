@@ -1,6 +1,6 @@
 package es.damas.controllers;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
@@ -29,10 +29,20 @@ public class ResumeControllerTest {
 	private ResumeController resumeController;
 
 	@Test
-	public void giveGameAndStateWhenAcceptThenIsCorrect() {
-    	doNothing().when(view).visit(resumeController);
+	public void giveGameAndStateWhenControlAndContinuePlayingThenNext() {
+    	when(view.continuePlaying()).thenReturn(true);
 		resumeController.control(view);
-    	verify(view).visit(resumeController);
+    	verify(view).continuePlaying();
+    	verify(state).reset();
+    	verify(game).reset();
+	}
+	
+	@Test
+	public void giveGameAndStateWhenControlAndNoContinuePlayingThenReset() {
+    	when(view.continuePlaying()).thenReturn(false);
+		resumeController.control(view);
+    	verify(view).continuePlaying();
+    	verify(state).next();
 	}
 
 }

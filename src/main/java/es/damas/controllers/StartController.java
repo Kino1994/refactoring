@@ -10,13 +10,13 @@ public class StartController extends Controller {
         super(game, state);
 	}
 
-	public void start() {
+	private void start() {
         this.state.next();
 	}
     
 	@Override
 	public void control(View view) {
-		view.visit(this);
+    	view.writeMenu(this.getDimension(), this.game);
+        this.start();
 	}
-
 }

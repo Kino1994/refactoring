@@ -4,13 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import es.damas.controllers.Controller;
-import es.damas.controllers.PlayController;
-import es.damas.controllers.ResumeController;
-import es.damas.controllers.StartController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
-import es.damas.models.Error;
+import es.damas.models.Game;
 import es.damas.models.Piece;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
@@ -30,57 +26,23 @@ public class View {
     private static final String TITTLE = "Draughts";    
     private static final String MESSAGE = "¿Queréis jugar otra";
     
-    private String input;
-
-
     public View(){
     	this.console = new Console();
         this.yesNoDialog = new YesNoDialog();
     }
 
-    public void visit(StartController startController) {
-    	assert startController != null;
-        this.console.writeln(TITTLE);
-        this.write(startController);
-        startController.start();
-    }
-
-    public void visit(PlayController playController) {
-    	assert playController != null;
-        Error error;
-        do {
-            error = null;
-            this.input = this.read(playController.getColor());
-            if (this.isCanceledFormat())
-                playController.cancel();
-            else if (!this.isMoveFormat()) {
-                error = Error.BAD_FORMAT;
-                this.writeError();
-            } else {
-                error = playController.move(this.getCoordinates());
-                this.write(playController);
-                if (error == null && playController.isBlocked())
-                    this.writeLost();
-            }
-        } while (error != null);
-    }
-
-    public void visit(ResumeController resumeController) {
-    	assert resumeController != null;
-        if (this.yesNoDialog.read(MESSAGE))
-            resumeController.reset();
-        else
-            resumeController.next();
+    public boolean continuePlaying() {
+        return this.yesNoDialog.read(MESSAGE);
     }
         
-    private Coordinate[] getCoordinates() {
-        assert this.isMoveFormat();
+    public Coordinate[] getCoordinates(String input) {
+        assert this.isMoveFormat(input);
         List<Coordinate> coordinateList = new ArrayList<Coordinate>();
-        while (this.input.length() > 0){
-            coordinateList.add(Coordinate.getInstance(this.input.substring(0, 2)));
-            this.input = this.input.substring(2, this.input.length());
-            if (this.input.length() > 0 && this.input.charAt(0) == '.')
-                this.input = this.input.substring(1, this.input.length());
+        while (input.length() > 0){
+            coordinateList.add(Coordinate.getInstance(input.substring(0, 2)));
+            input = input.substring(2, input.length());
+            if (input.length() > 0 && input.charAt(0) == '.')
+                input = input.substring(1, input.length());
         }
         Coordinate[] coordinates = new Coordinate[coordinateList.size()];
         for(int i=0; i< coordinates.length; i++){
@@ -89,26 +51,25 @@ public class View {
         return coordinates;
     }
     
-    void write(Controller controller) {
-        assert controller != null;
-        final int DIMENSION = controller.getDimension();
-        this.writeNumbersLine(DIMENSION);
-        for (int i = 0; i < DIMENSION; i++)
-            this.writePiecesRow(i, controller);
-        this.writeNumbersLine(DIMENSION);
+    public void writeMenu(int dimension, Game game) {
+    	this.writeTittle();
+        this.writeNumbersLine(dimension);
+        for (int i = 0; i < dimension; i++)
+            this.writePiecesRow(i, dimension, game);
+        this.writeNumbersLine(dimension);
     }
 
-    private void writeNumbersLine(final int DIMENSION) {
+    private void writeNumbersLine(int dimension) {
         this.console.write(" ");
-        for (int i = 0; i < DIMENSION; i++)
+        for (int i = 0; i < dimension; i++)
             this.console.write((i + 1) + "");
         this.console.writeln();
     }
 
-    private void writePiecesRow(final int row, Controller controller) {
+    private void writePiecesRow(final int row, int dimension, Game game) {
         this.console.write((row + 1) + "");
-        for (int j = 0; j < controller.getDimension(); j++) {
-            Piece piece = controller.getPiece(new Coordinate(row, j));
+        for (int j = 0; j < dimension; j++) {
+            Piece piece = game.getPiece(new Coordinate(row, j));
             if (piece == null)
                 this.console.write(" ");
             else 
@@ -117,25 +78,29 @@ public class View {
         this.console.writeln((row + 1) + "");
     }
 
-    private String read(Color color) {
+    public String read(Color color) {
         final String titleColor = PROMPT.replace(COLOR_PARAM,COLOR_VALUES[color.ordinal()]);
         return this.console.readString(titleColor);
     }
 
-    private boolean isCanceledFormat() {
-        return this.input.equals(CANCEL_FORMAT);
+    public boolean isCanceledFormat(String input) {
+        return input.equals(CANCEL_FORMAT);
     }
 
-    private boolean isMoveFormat() {
-        return Pattern.compile(MOVEMENT_FORMAT).matcher(this.input).find();
+    public boolean isMoveFormat(String input) {
+        return Pattern.compile(MOVEMENT_FORMAT).matcher(input).find();
     }
 
-    private void writeError(){
+    public void writeError(){
         this.console.writeln(ERROR_MESSAGE);
     }
 
-    private void writeLost() {
+    public void writeLost() {
         this.console.writeln(LOST_MESSAGE);
+    }
+    
+    public void writeTittle () {
+    	this.console.writeln(TITTLE);
     }
     
 }

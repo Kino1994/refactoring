@@ -1,6 +1,7 @@
 package es.damas.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +38,11 @@ public class PlayControllerTest {
 	@InjectMocks
     private PlayController playController;
 	
+    private static final String MOVEMENT_FORMAT = "11.22";
+    
+    private static final int DIMENSION = 7;
+   
+	
 	private Coordinate [] coordinates = {new Coordinate(1, 1),new Coordinate(2, 2)};
     
     @Test
@@ -67,10 +73,64 @@ public class PlayControllerTest {
    	}
     
     @Test
-   	public void giveGameAndStateWhenAcceptThenIsCorrect() {
-    	doNothing().when(view).visit(playController);
-    	playController.control(view);
-    	verify(view).visit(playController);
+   	public void giveGameAndStateWhenControlThenMove() {
+    	when(game.getTurnColor()).thenReturn(Color.WHITE);
+    	when(view.read(Color.WHITE)).thenReturn(MOVEMENT_FORMAT); 
+    	when(view.isCanceledFormat(MOVEMENT_FORMAT)).thenReturn(false);
+    	when(view.isMoveFormat(MOVEMENT_FORMAT)).thenReturn(true);
+    	when(view.getCoordinates(MOVEMENT_FORMAT)).thenReturn(coordinates);
+		when(game.move(eq(coordinates))).thenReturn(null);
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.isBlocked()).thenReturn(false);
+     	playController.control(view);
+        verify(view).writeMenu(DIMENSION, this.game);
+   	}
+    
+    @Test
+   	public void giveGameAndStateWhenControlThenBadMoveFormatAndMove() {    	
+    	when(game.getTurnColor()).thenReturn(Color.WHITE);
+    	when(view.read(Color.WHITE)).thenReturn(MOVEMENT_FORMAT); 
+    	when(view.isCanceledFormat(MOVEMENT_FORMAT)).thenReturn(false);
+    	doNothing().when(view).writeError();
+    	when(view.isMoveFormat(MOVEMENT_FORMAT)).thenReturn(false).thenReturn(true);
+    	when(view.getCoordinates(MOVEMENT_FORMAT)).thenReturn(coordinates);
+		when(game.move(eq(coordinates))).thenReturn(Error.NOT_DIAGONAL).thenReturn(null);
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.isBlocked()).thenReturn(false);
+     	playController.control(view);
+    	verify(view).writeError();
+        verify(view).writeMenu(DIMENSION, this.game);
+   	}
+    
+    @Test
+   	public void giveGameAndStateWhenControlThenCancel() {    	
+    	when(game.getTurnColor()).thenReturn(Color.WHITE);
+    	when(view.read(Color.WHITE)).thenReturn(MOVEMENT_FORMAT); 
+    	when(view.isCanceledFormat(MOVEMENT_FORMAT)).thenReturn(true).thenReturn(false);
+    	doNothing().when(game).cancel();
+    	doNothing().when(state).next();
+    	when(view.isMoveFormat(MOVEMENT_FORMAT)).thenReturn(true);
+    	when(view.getCoordinates(MOVEMENT_FORMAT)).thenReturn(coordinates);
+		when(game.move(eq(coordinates))).thenReturn(Error.NOT_DIAGONAL).thenReturn(null);
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.isBlocked()).thenReturn(false);
+     	playController.control(view);
+    	verify(game).cancel();
+    	verify(state).next();
+   	}
+    
+    @Test
+   	public void giveGameAndStateWhenControlThenErrorAndMove() {
+    	when(game.getTurnColor()).thenReturn(Color.WHITE);
+    	when(view.read(Color.WHITE)).thenReturn(MOVEMENT_FORMAT); 
+    	when(view.isCanceledFormat(MOVEMENT_FORMAT)).thenReturn(false);
+    	when(view.isMoveFormat(MOVEMENT_FORMAT)).thenReturn(true);
+    	when(view.getCoordinates(MOVEMENT_FORMAT)).thenReturn(coordinates);
+		when(game.move(eq(coordinates))).thenReturn(Error.NOT_DIAGONAL).thenReturn(null);
+		when(game.getDimension()).thenReturn(DIMENSION);
+		when(game.isBlocked()).thenReturn(false);
+     	playController.control(view);
+        verify(view).writeMenu(DIMENSION, this.game);
    	}
     
 }
