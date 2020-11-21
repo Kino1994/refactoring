@@ -1,5 +1,6 @@
 package es.damas.views;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -15,6 +16,8 @@ import es.damas.controllers.InteractorController;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
+import es.damas.models.Color;
+import es.damas.models.Coordinate;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
 
@@ -29,10 +32,7 @@ public class ViewTest {
 	
 	@Mock
 	private PlayController playController;
-	
-	@Mock
-	private PlayView playView;
-    		
+	    		
 	@Mock
 	private ResumeController resumeController;
 	
@@ -48,6 +48,14 @@ public class ViewTest {
     private static final String TITTLE = "Draughts";
     
     private static final String MESSAGE = "¿Queréis jugar otra";
+    
+    private static final String LOST_MESSAGE = "Derrota!!! No puedes mover tus fichas!!!";
+    
+    private static final String BLACK_MOVE = "Mueven las negras: ";
+    
+    private static final String WHITE_MOVE = "Mueven las blancas: ";
+    
+    private static final String ERROR_MESSAGE = "Error!!! Formato incorrecto";
 	
 	@Test
     public void testGivenInteractorControllerWhenInteractThenIsCorrect() {
@@ -66,11 +74,32 @@ public class ViewTest {
 	
 	@Test
     public void testGivenPlayControllerWhenVisitThenIsCorrect() {
-		doNothing().when(playView).interact(playController);
+		when(playController.getColor()).thenReturn(Color.BLACK);
+		when(console.readString(BLACK_MOVE)).thenReturn("12.22");
+		when(playController.move(any(Coordinate.class))).thenReturn(null);
+		when(playController.isBlocked()).thenReturn(true);
 		view.visit(playController);
-		verify(playView).interact(playController);
-
+		verify(console).writeln(LOST_MESSAGE);
+	}
+	
+	@Test
+    public void testGivenPlayControllerWhenInteractMovementFormatIsCancelhenIsCorrect() {
+		when(playController.getColor()).thenReturn(Color.WHITE);
+		when(console.readString(WHITE_MOVE)).thenReturn("-1");
+		doNothing().when(playController).cancel();
+		view.visit(playController);
+		verify(playController).cancel();
 	}	
+	
+	@Test
+	public void testgivenPlayControllerWhenInteractMovementFormatIsNotCorrectThenIsCorrect() {
+		when(playController.getColor()).thenReturn(Color.BLACK);
+		when(console.readString(BLACK_MOVE)).thenReturn(ERROR_MESSAGE).thenReturn("12.22");
+		when(playController.move(any(Coordinate.class))).thenReturn(null);
+		when(playController.isBlocked()).thenReturn(true);
+		view.visit(playController);
+		verify(console).writeln(LOST_MESSAGE);
+	}
 		
 	@Test
     public void testGivenResumeControllerWhenVisitThenIsCorrect() {
@@ -87,5 +116,5 @@ public class ViewTest {
 		view.visit(resumeController);
 		verify(resumeController).next();
 	}
-
+	
 }
