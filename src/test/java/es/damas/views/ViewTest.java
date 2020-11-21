@@ -3,6 +3,7 @@ package es.damas.views;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +19,8 @@ import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
+import es.damas.models.Pawn;
+import es.damas.models.Piece;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
 
@@ -56,6 +59,14 @@ public class ViewTest {
     private static final String WHITE_MOVE = "Mueven las blancas: ";
     
     private static final String ERROR_MESSAGE = "Error!!! Formato incorrecto";
+    
+	private static final int DIMENSION = 7;
+	
+	private static final String BLACK = "n";
+	
+	private static final String WHITE = "b";
+			
+	private static final String EMPTY = " ";			
 	
 	@Test
     public void testGivenInteractorControllerWhenInteractThenIsCorrect() {
@@ -83,7 +94,7 @@ public class ViewTest {
 	}
 	
 	@Test
-    public void testGivenPlayControllerWhenInteractMovementFormatIsCancelhenIsCorrect() {
+    public void testGivenPlayControllerWhenVisitAndInteractMovementFormatIsCancelhenIsCorrect() {
 		when(playController.getColor()).thenReturn(Color.WHITE);
 		when(console.readString(WHITE_MOVE)).thenReturn("-1");
 		doNothing().when(playController).cancel();
@@ -92,7 +103,7 @@ public class ViewTest {
 	}	
 	
 	@Test
-	public void testgivenPlayControllerWhenInteractMovementFormatIsNotCorrectThenIsCorrect() {
+	public void testgivenPlayControllerWhenVisitAndInteractMovementFormatIsNotCorrectThenIsCorrect() {
 		when(playController.getColor()).thenReturn(Color.BLACK);
 		when(console.readString(BLACK_MOVE)).thenReturn(ERROR_MESSAGE).thenReturn("12.22");
 		when(playController.move(any(Coordinate.class))).thenReturn(null);
@@ -110,11 +121,53 @@ public class ViewTest {
 	}
 	
 	@Test
-    public void testGivenPlayControllerWhenInteractThenIsNotCorrect() {
+    public void testGivenResumeControllerWhenVisitThenIsNotCorrect() {
 		doNothing().when(resumeController).reset();
 		when(yesNoDialog.read(anyString())).thenReturn(false);
 		view.visit(resumeController);
 		verify(resumeController).next();
 	}
+	
+	@Test
+    public void testGivenInteractorControllerWhenWriteThenViewAllBlacks() {
+		when(interactorController.getDimension()).thenReturn(DIMENSION);
+		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.BLACK));
+		view.write(interactorController);
+		for (int i = 1; i<=DIMENSION; i++) {
+			verify(console,times(3)).write(String.valueOf(i));
+		}
+		verify(console,times(2)).write(EMPTY);
+		verify(console,times(49)).write(BLACK);
+		verify(console,times(2)).writeln();
+	}
+	
+	@Test
+    public void testGivenInteractorControllerWhenWriteThenViewAllWhites() {
+		when(interactorController.getDimension()).thenReturn(DIMENSION);
+		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.WHITE));
+		view.write(interactorController);
+		for (int i = 1; i<=DIMENSION; i++) {
+			verify(console,times(3)).write(String.valueOf(i));
+		}
+		verify(console,times(2)).write(EMPTY);
+		verify(console,times(49)).write(WHITE);
+		verify(console,times(2)).writeln();
+	}
+	
+	
+	@Test
+    public void testGivenInteractorControllerWhenWriteThenViewAllEmpty() {
+		when(interactorController.getDimension()).thenReturn(DIMENSION);
+		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(null);
+		view.write(interactorController);
+		for (int i = 1; i<=DIMENSION; i++) {
+			verify(console,times(3)).write(String.valueOf(i));
+		}
+		verify(console,times(51)).write(EMPTY);
+		verify(console,times(2)).writeln();
+	}
+	
+    
+
 	
 }

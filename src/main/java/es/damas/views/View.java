@@ -12,6 +12,7 @@ import es.damas.controllers.StartController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
 import es.damas.models.Error;
+import es.damas.models.Piece;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
 
@@ -47,7 +48,7 @@ public class View implements InteractorControllersVisitor {
     public void visit(StartController startController) {
     	assert startController != null;
         this.console.writeln(TITTLE);
-        new GameView().write(startController);
+        this.write(startController);
         startController.start();
     }
 
@@ -65,7 +66,7 @@ public class View implements InteractorControllersVisitor {
                 this.writeError();
             } else {
                 error = playController.move(this.getCoordinates());
-                new GameView().write(playController);
+                this.write(playController);
                 if (error == null && playController.isBlocked())
                     this.writeLost();
             }
@@ -95,6 +96,34 @@ public class View implements InteractorControllersVisitor {
             coordinates[i] = coordinateList.get(i);
         }
         return coordinates;
+    }
+    
+    void write(InteractorController controller) {
+        assert controller != null;
+        final int DIMENSION = controller.getDimension();
+        this.writeNumbersLine(DIMENSION);
+        for (int i = 0; i < DIMENSION; i++)
+            this.writePiecesRow(i, controller);
+        this.writeNumbersLine(DIMENSION);
+    }
+
+    private void writeNumbersLine(final int DIMENSION) {
+        this.console.write(" ");
+        for (int i = 0; i < DIMENSION; i++)
+            this.console.write((i + 1) + "");
+        this.console.writeln();
+    }
+
+    private void writePiecesRow(final int row, InteractorController controller) {
+        this.console.write((row + 1) + "");
+        for (int j = 0; j < controller.getDimension(); j++) {
+            Piece piece = controller.getPiece(new Coordinate(row, j));
+            if (piece == null)
+                this.console.write(" ");
+            else 
+                this.console.write(piece.getCode());
+        }
+        this.console.writeln((row + 1) + "");
     }
 
     private String read(Color color) {
