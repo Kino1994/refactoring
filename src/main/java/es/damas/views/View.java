@@ -5,15 +5,18 @@ import es.damas.controllers.InteractorControllersVisitor;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
+import es.damas.utils.Console;
 
 public class View implements InteractorControllersVisitor {
 
-    private StartView startView;
     private PlayView playView;
     private ResumeView resumeView;
+    private Console console;
+    
+    private static final String TITTLE = "Draughts";
 
     public View(){
-        this.startView = new StartView();
+    	this.console = new Console();
         this.playView = new PlayView();
         this.resumeView = new ResumeView();
     }
@@ -25,8 +28,10 @@ public class View implements InteractorControllersVisitor {
 
     @Override
     public void visit(StartController startController) {
-        assert startController != null;
-        this.startView.interact(startController);
+    	assert startController != null;
+        this.console.writeln(TITTLE);
+        new GameView().write(startController);
+        startController.start();
     }
 
     @Override
@@ -40,5 +45,5 @@ public class View implements InteractorControllersVisitor {
         assert resumeController != null;
         this.resumeView.interact(resumeController);
     }
-
+    
 }

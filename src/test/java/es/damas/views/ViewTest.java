@@ -1,6 +1,5 @@
 package es.damas.views;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
@@ -14,6 +13,7 @@ import es.damas.controllers.InteractorController;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
+import es.damas.utils.Console;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ViewTest {
@@ -28,9 +28,6 @@ public class ViewTest {
 	private PlayController playController;
 	
 	@Mock
-	private StartView startView;
-    
-	@Mock
 	private PlayView playView;
     
     @Mock
@@ -39,8 +36,13 @@ public class ViewTest {
 	@Mock
 	private ResumeController resumeController;
 	
+	@Mock
+	private Console console;
+	
 	@InjectMocks
     private View view = new View();
+	
+    private static final String TITTLE = "Draughts";
 	
 	@Test
     public void testGivenInteractorControllerWhenInteractThenIsCorrect() {
@@ -51,9 +53,10 @@ public class ViewTest {
 	
 	@Test
     public void testGivenStartControllerWhenVisitThenIsCorrect() {
-		doNothing().when(startView).interact(startController);
+		doNothing().when(startController).start();
+		doNothing().when(console).writeln(TITTLE);
 		view.visit(startController);
-		verify(startView).interact(startController);
+		verify(console).writeln(TITTLE);
 	}
 	
 	@Test
