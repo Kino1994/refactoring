@@ -3,6 +3,7 @@ package es.damas.controllers;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
 import es.damas.models.Game;
+import es.damas.models.Piece;
 import es.damas.models.State;
 
 public class Controller {
@@ -25,5 +26,9 @@ public class Controller {
     public int getDimension() {
         return this.game.getDimension();
     }
+    
+    public Piece getPiece(Coordinate coordinate) {
+		return this.game.getPiece(coordinate);
+	}
 
 }
