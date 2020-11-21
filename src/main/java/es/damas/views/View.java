@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import es.damas.controllers.InteractorController;
-import es.damas.controllers.InteractorControllersVisitor;
+import es.damas.controllers.Controller;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
@@ -16,7 +15,7 @@ import es.damas.models.Piece;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
 
-public class View implements InteractorControllersVisitor {
+public class View {
 
     private Console console;
     private YesNoDialog yesNoDialog;
@@ -39,12 +38,6 @@ public class View implements InteractorControllersVisitor {
         this.yesNoDialog = new YesNoDialog();
     }
 
-    public void interact(InteractorController controller) {
-        assert controller != null;
-        controller.accept(this);
-    }
-
-    @Override
     public void visit(StartController startController) {
     	assert startController != null;
         this.console.writeln(TITTLE);
@@ -52,7 +45,6 @@ public class View implements InteractorControllersVisitor {
         startController.start();
     }
 
-    @Override
     public void visit(PlayController playController) {
     	assert playController != null;
         Error error;
@@ -73,7 +65,6 @@ public class View implements InteractorControllersVisitor {
         } while (error != null);
     }
 
-    @Override
     public void visit(ResumeController resumeController) {
     	assert resumeController != null;
         if (this.yesNoDialog.read(MESSAGE))
@@ -98,7 +89,7 @@ public class View implements InteractorControllersVisitor {
         return coordinates;
     }
     
-    void write(InteractorController controller) {
+    void write(Controller controller) {
         assert controller != null;
         final int DIMENSION = controller.getDimension();
         this.writeNumbersLine(DIMENSION);
@@ -114,7 +105,7 @@ public class View implements InteractorControllersVisitor {
         this.console.writeln();
     }
 
-    private void writePiecesRow(final int row, InteractorController controller) {
+    private void writePiecesRow(final int row, Controller controller) {
         this.console.write((row + 1) + "");
         for (int j = 0; j < controller.getDimension(); j++) {
             Piece piece = controller.getPiece(new Coordinate(row, j));

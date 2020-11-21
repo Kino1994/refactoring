@@ -2,11 +2,12 @@ package es.damas.controllers;
 
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
-import es.damas.models.State;
 import es.damas.models.Error;
 import es.damas.models.Game;
+import es.damas.models.State;
+import es.damas.views.View;
 
-public class PlayController extends InteractorController {
+public class PlayController extends Controller {
 
 	private static final int MINIMUM_COORDINATES = 2;
 
@@ -39,9 +40,8 @@ public class PlayController extends InteractorController {
 	}
 
 	@Override
-	public void accept(InteractorControllersVisitor controllersVisitor) {
-		assert controllersVisitor != null;
-		controllersVisitor.visit(this);
+	public void control(View view) {
+		view.visit(this);
 	}
 
 }

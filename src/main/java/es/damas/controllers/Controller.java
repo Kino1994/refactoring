@@ -5,8 +5,9 @@ import es.damas.models.Coordinate;
 import es.damas.models.Game;
 import es.damas.models.Piece;
 import es.damas.models.State;
+import es.damas.views.View;
 
-public class Controller {
+public abstract class Controller {
 
     protected Game game;
     protected State state;
@@ -30,5 +31,7 @@ public class Controller {
     public Piece getPiece(Coordinate coordinate) {
 		return this.game.getPiece(coordinate);
 	}
+    
+    public abstract void control(View view);
 
 }

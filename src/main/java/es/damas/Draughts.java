@@ -3,7 +3,7 @@ package es.damas;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.damas.controllers.InteractorController;
+import es.damas.controllers.Controller;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
@@ -17,13 +17,13 @@ class Draughts {
     private View view;
     private Game game;
     private State state;
-	private Map<StateValue, InteractorController> controllers;
+	private Map<StateValue, Controller> controllers;
 
     private Draughts(){
         this.view = new View();
 		this.game = new Game();
 		this.state = new State();
-        this.controllers = new HashMap<StateValue, InteractorController>();
+        this.controllers = new HashMap<StateValue, Controller>();
 		this.controllers.put(StateValue.INITIAL, new StartController(this.game, this.state));
 		this.controllers.put(StateValue.IN_GAME, new PlayController(this.game, this.state));
 		this.controllers.put(StateValue.FINAL, new ResumeController(this.game, this.state));
@@ -31,15 +31,15 @@ class Draughts {
     }
 
     private void play() {
-        InteractorController controller;
+        Controller controller;
 		do {
 			controller = this.getController();
 			if (controller != null)
-				this.view.interact(controller);
+				controller.control(this.view);
 		} while (controller != null); 
     }
     
-    public InteractorController getController() {
+    public Controller getController() {
 		return this.controllers.get(this.state.getValueState());
     }
 

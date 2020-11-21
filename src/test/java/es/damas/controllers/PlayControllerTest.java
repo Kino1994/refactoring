@@ -17,6 +17,7 @@ import es.damas.models.Error;
 import es.damas.models.Game;
 import es.damas.models.Piece;
 import es.damas.models.State;
+import es.damas.views.View;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlayControllerTest {
@@ -29,10 +30,10 @@ public class PlayControllerTest {
 	
 	@Mock
 	private Piece piece;
-		
-	@Mock
-	private InteractorControllersVisitor interactorControllersVisitor;
 	
+	@Mock
+	private View view;
+			
 	@InjectMocks
     private PlayController playController;
 	
@@ -67,9 +68,9 @@ public class PlayControllerTest {
     
     @Test
    	public void giveGameAndStateWhenAcceptThenIsCorrect() {
-    	doNothing().when(interactorControllersVisitor).visit(playController);
-    	playController.accept(interactorControllersVisitor);
-    	verify(interactorControllersVisitor).visit(playController);
+    	doNothing().when(view).visit(playController);
+    	playController.control(view);
+    	verify(view).visit(playController);
    	}
     
 }

@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import es.damas.models.Game;
 import es.damas.models.State;
+import es.damas.views.View;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StartControllerTest {
@@ -22,16 +23,16 @@ public class StartControllerTest {
 	private State state;
 		
 	@Mock
-	private InteractorControllersVisitor interactorControllersVisitor;
+	private View view;
 	
 	@InjectMocks
 	private StartController startController;
     
     @Test
    	public void testGivenGameAndStateWhenAcceptThenIsCorrect() {
-    	doNothing().when(interactorControllersVisitor).visit(startController);
-    	startController.accept(interactorControllersVisitor);
-    	verify(interactorControllersVisitor).visit(startController);
+    	doNothing().when(view).visit(startController);
+    	startController.control(view);
+    	verify(view).visit(startController);
    	}
     
 

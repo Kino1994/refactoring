@@ -13,14 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import es.damas.controllers.InteractorController;
+import es.damas.controllers.Controller;
 import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
 import es.damas.models.Pawn;
-import es.damas.models.Piece;
 import es.damas.utils.Console;
 import es.damas.utils.YesNoDialog;
 
@@ -28,7 +27,7 @@ import es.damas.utils.YesNoDialog;
 public class ViewTest {
 	
 	@Mock
-	private InteractorController interactorController;
+	private Controller controller;
 	
 	@Mock
 	private StartController startController;
@@ -67,14 +66,7 @@ public class ViewTest {
 	private static final String WHITE = "b";
 			
 	private static final String EMPTY = " ";			
-	
-	@Test
-    public void testGivenInteractorControllerWhenInteractThenIsCorrect() {
-		doNothing().when(interactorController).accept(view);
-		view.interact(interactorController);
-		verify(interactorController).accept(view);
-	}	
-	
+		
 	@Test
     public void testGivenStartControllerWhenVisitThenIsCorrect() {
 		doNothing().when(startController).start();
@@ -130,9 +122,9 @@ public class ViewTest {
 	
 	@Test
     public void testGivenInteractorControllerWhenWriteThenViewAllBlacks() {
-		when(interactorController.getDimension()).thenReturn(DIMENSION);
-		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.BLACK));
-		view.write(interactorController);
+		when(controller.getDimension()).thenReturn(DIMENSION);
+		when(controller.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.BLACK));
+		view.write(controller);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}
@@ -143,9 +135,9 @@ public class ViewTest {
 	
 	@Test
     public void testGivenInteractorControllerWhenWriteThenViewAllWhites() {
-		when(interactorController.getDimension()).thenReturn(DIMENSION);
-		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.WHITE));
-		view.write(interactorController);
+		when(controller.getDimension()).thenReturn(DIMENSION);
+		when(controller.getPiece(any(Coordinate.class))).thenReturn(new Pawn(Color.WHITE));
+		view.write(controller);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}
@@ -157,9 +149,9 @@ public class ViewTest {
 	
 	@Test
     public void testGivenInteractorControllerWhenWriteThenViewAllEmpty() {
-		when(interactorController.getDimension()).thenReturn(DIMENSION);
-		when(interactorController.getPiece(any(Coordinate.class))).thenReturn(null);
-		view.write(interactorController);
+		when(controller.getDimension()).thenReturn(DIMENSION);
+		when(controller.getPiece(any(Coordinate.class))).thenReturn(null);
+		view.write(controller);
 		for (int i = 1; i<=DIMENSION; i++) {
 			verify(console,times(3)).write(String.valueOf(i));
 		}

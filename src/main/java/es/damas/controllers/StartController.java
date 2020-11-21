@@ -2,8 +2,9 @@ package es.damas.controllers;
 
 import es.damas.models.Game;
 import es.damas.models.State;
+import es.damas.views.View;
 
-public class StartController extends InteractorController {
+public class StartController extends Controller {
 
 	public StartController(Game game, State state) {
         super(game, state);
@@ -13,10 +14,9 @@ public class StartController extends InteractorController {
         this.state.next();
 	}
     
-    @Override
-	public void accept(InteractorControllersVisitor controllersVisitor) {
-		assert controllersVisitor != null;
-		controllersVisitor.visit(this);
-    }
+	@Override
+	public void control(View view) {
+		view.visit(this);
+	}
 
 }
