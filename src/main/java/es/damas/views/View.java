@@ -31,7 +31,7 @@ public class View implements InteractorControllersVisitor {
     private static final String TITTLE = "Draughts";    
     private static final String MESSAGE = "¿Queréis jugar otra";
     
-    private String string;
+    private String input;
 
 
     public View(){
@@ -58,7 +58,7 @@ public class View implements InteractorControllersVisitor {
         Error error;
         do {
             error = null;
-            this.string = this.read(playController.getColor());
+            this.input = this.read(playController.getColor());
             if (this.isCanceledFormat())
                 playController.cancel();
             else if (!this.isMoveFormat()) {
@@ -85,11 +85,11 @@ public class View implements InteractorControllersVisitor {
     private Coordinate[] getCoordinates() {
         assert this.isMoveFormat();
         List<Coordinate> coordinateList = new ArrayList<Coordinate>();
-        while (string.length() > 0){
-            coordinateList.add(Coordinate.getInstance(string.substring(0, 2)));
-            string = string.substring(2, string.length());
-            if (string.length() > 0 && string.charAt(0) == '.')
-                string = string.substring(1, string.length());
+        while (this.input.length() > 0){
+            coordinateList.add(Coordinate.getInstance(this.input.substring(0, 2)));
+            this.input = this.input.substring(2, this.input.length());
+            if (this.input.length() > 0 && this.input.charAt(0) == '.')
+                this.input = this.input.substring(1, this.input.length());
         }
         Coordinate[] coordinates = new Coordinate[coordinateList.size()];
         for(int i=0; i< coordinates.length; i++){
@@ -132,11 +132,11 @@ public class View implements InteractorControllersVisitor {
     }
 
     private boolean isCanceledFormat() {
-        return string.equals(CANCEL_FORMAT);
+        return this.input.equals(CANCEL_FORMAT);
     }
 
     private boolean isMoveFormat() {
-        return Pattern.compile(MOVEMENT_FORMAT).matcher(string).find();
+        return Pattern.compile(MOVEMENT_FORMAT).matcher(this.input).find();
     }
 
     private void writeError(){
