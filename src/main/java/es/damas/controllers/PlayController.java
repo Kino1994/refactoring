@@ -8,14 +8,11 @@ import es.damas.models.Game;
 
 public class PlayController extends InteractorController {
 
-	private CancelController cancelController;
-
 	private static final int MINIMUM_COORDINATES = 2;
 
 
 	public PlayController(Game game, State state) {
 		super(game, state);
-		this.cancelController = new CancelController(game, state);
 	}
 
 	public Error move(Coordinate... coordinates) {
@@ -29,7 +26,8 @@ public class PlayController extends InteractorController {
 	}
 
 	public void cancel() {
-		this.cancelController.cancel();
+		this.game.cancel();
+		this.state.next();
 	}
 
 	public Color getColor() {

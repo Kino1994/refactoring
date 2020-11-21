@@ -29,10 +29,7 @@ public class PlayControllerTest {
 	
 	@Mock
 	private Piece piece;
-	
-	@Mock
-	private CancelController cancelController;
-	
+		
 	@Mock
 	private InteractorControllersVisitor interactorControllersVisitor;
 	
@@ -49,10 +46,11 @@ public class PlayControllerTest {
     
     @Test
    	public void testGivenGameAndStateWhenCancelThenIsCorrect() {
-   		doNothing().when(cancelController).cancel();
-   		playController.cancel();
-   		verify(game).cancel();		
-   		verify(state).next();	
+    	doNothing().when(game).cancel();		
+		doNothing().when(state).next();
+		playController.cancel();
+		verify(game).cancel();		
+		verify(state).next();	
    	}
     
     @Test
