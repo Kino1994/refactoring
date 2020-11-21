@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -16,7 +15,6 @@ import es.damas.models.Coordinate;
 import es.damas.models.Game;
 import es.damas.models.Pawn;
 import es.damas.models.State;
-import es.damas.views.View;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
@@ -29,13 +27,15 @@ public class ControllerTest {
 
 	private Controller controller;
 	
+	private static final int DIMENSION = 8;
+	
 	private Coordinate coordinate1 = new Coordinate(2, 1);
 	
 	private Coordinate coordinate2 = new Coordinate(6, 1);
 
 	@Before
 	public void setUp() {
-		controller = new PlayController(game,state);	
+		controller = new PlayController();	
 	}
 		
 	@Test
@@ -53,7 +53,7 @@ public class ControllerTest {
 	@Test
 	public void testGivenGameAndStateWhengetDimensionThenIsCorrect() {
 		when(game.getDimension()).thenReturn(7);
-    	assertEquals(7, controller.getDimension());	
+    	assertEquals(DIMENSION, controller.getDimension());	
 	}
 	
 	@Test

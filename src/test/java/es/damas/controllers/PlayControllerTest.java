@@ -17,7 +17,6 @@ import es.damas.models.Coordinate;
 import es.damas.models.Error;
 import es.damas.models.Game;
 import es.damas.models.Piece;
-import es.damas.models.State;
 import es.damas.views.View;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,9 +24,6 @@ public class PlayControllerTest {
 	
 	@Mock
 	private Game game;
-	
-	@Mock
-	private State state;
 	
 	@Mock
 	private Piece piece;
@@ -54,10 +50,8 @@ public class PlayControllerTest {
     @Test
    	public void testGivenGameAndStateWhenCancelThenIsCorrect() {
     	doNothing().when(game).cancel();		
-		doNothing().when(state).next();
 		playController.cancel();
 		verify(game).cancel();		
-		verify(state).next();	
    	}
     
     @Test
@@ -108,7 +102,6 @@ public class PlayControllerTest {
     	when(view.read(Color.WHITE)).thenReturn(MOVEMENT_FORMAT); 
     	when(view.isCanceledFormat(MOVEMENT_FORMAT)).thenReturn(true).thenReturn(false);
     	doNothing().when(game).cancel();
-    	doNothing().when(state).next();
     	when(view.isMoveFormat(MOVEMENT_FORMAT)).thenReturn(true);
     	when(view.getCoordinates(MOVEMENT_FORMAT)).thenReturn(coordinates);
 		when(game.move(eq(coordinates))).thenReturn(Error.NOT_DIAGONAL).thenReturn(null);
@@ -116,7 +109,6 @@ public class PlayControllerTest {
 		when(game.isBlocked()).thenReturn(false);
      	playController.control(view);
     	verify(game).cancel();
-    	verify(state).next();
    	}
     
     @Test
