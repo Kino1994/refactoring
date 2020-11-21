@@ -6,19 +6,22 @@ import es.damas.controllers.PlayController;
 import es.damas.controllers.ResumeController;
 import es.damas.controllers.StartController;
 import es.damas.utils.Console;
+import es.damas.utils.YesNoDialog;
 
 public class View implements InteractorControllersVisitor {
 
     private PlayView playView;
-    private ResumeView resumeView;
     private Console console;
+    private YesNoDialog yesNoDialog;
     
-    private static final String TITTLE = "Draughts";
+    private static final String TITTLE = "Draughts";    
+    private static final String MESSAGE = "¿Queréis jugar otra";
+
 
     public View(){
     	this.console = new Console();
         this.playView = new PlayView();
-        this.resumeView = new ResumeView();
+        this.yesNoDialog = new YesNoDialog();
     }
 
     public void interact(InteractorController controller) {
@@ -42,8 +45,11 @@ public class View implements InteractorControllersVisitor {
 
     @Override
     public void visit(ResumeController resumeController) {
-        assert resumeController != null;
-        this.resumeView.interact(resumeController);
+    	assert resumeController != null;
+        if (this.yesNoDialog.read(MESSAGE))
+            resumeController.reset();
+        else
+            resumeController.next();
     }
     
 }

@@ -7,7 +7,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({ 
     GameViewTest.class, 
     PlayViewTest.class,
-    ResumeViewTest.class,
     ViewTest.class})
 public class AllViewsTest {
 
