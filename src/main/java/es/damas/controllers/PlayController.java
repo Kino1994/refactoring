@@ -9,16 +9,23 @@ import es.damas.models.Game;
 public class PlayController extends InteractorController {
 
 	private CancelController cancelController;
-	private MoveController moveController;
+
+	private static final int MINIMUM_COORDINATES = 2;
+
 
 	public PlayController(Game game, State state) {
 		super(game, state);
 		this.cancelController = new CancelController(game, state);
-		this.moveController = new MoveController(game, state);
 	}
 
 	public Error move(Coordinate... coordinates) {
-		return this.moveController.move(coordinates);
+		assert coordinates.length >= MINIMUM_COORDINATES;
+		for(Coordinate coordinate: coordinates)
+			assert coordinate != null;
+		Error error = this.game.move(coordinates);
+		if (this.game.isBlocked())
+			this.state.next();
+		return error;
 	}
 
 	public void cancel() {

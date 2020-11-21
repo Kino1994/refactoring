@@ -34,9 +34,6 @@ public class PlayControllerTest {
 	private CancelController cancelController;
 	
 	@Mock
-	private MoveController moveController;
-	
-	@Mock
 	private InteractorControllersVisitor interactorControllersVisitor;
 	
 	@InjectMocks
