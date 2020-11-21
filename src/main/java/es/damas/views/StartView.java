@@ -1,13 +1,16 @@
 package es.damas.views;
 
 import es.damas.controllers.StartController;
+import es.damas.utils.Console;
 
-class StartView extends SubView {
+class StartView {
 
     private static final String TITTLE = "Draughts";
+    
+    private Console console;
 
     StartView(){
-        super();
+    	this.console = new Console();
     }
 
     void interact(StartController startController) {

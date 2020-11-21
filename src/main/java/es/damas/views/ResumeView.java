@@ -3,7 +3,7 @@ package es.damas.views;
 import es.damas.controllers.ResumeController;
 import es.damas.utils.YesNoDialog;
 
-class ResumeView extends SubView {
+class ResumeView {
 
     private static final String MESSAGE = "¿Queréis jugar otra";
     

@@ -3,8 +3,15 @@ package es.damas.views;
 import es.damas.controllers.InteractorController;
 import es.damas.models.Coordinate;
 import es.damas.models.Piece;
+import es.damas.utils.Console;
 
-class GameView extends SubView {
+class GameView {
+	
+	private Console console;
+	
+	public GameView() {
+		this.console = new Console();
+	}
 
     void write(InteractorController controller) {
         assert controller != null;

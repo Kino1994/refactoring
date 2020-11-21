@@ -8,8 +8,9 @@ import es.damas.controllers.PlayController;
 import es.damas.models.Color;
 import es.damas.models.Coordinate;
 import es.damas.models.Error;
+import es.damas.utils.Console;
 
-class PlayView extends SubView {
+class PlayView {
     
     private static final String COLOR_PARAM = "#color";
     private static final String[] COLOR_VALUES = { "blancas", "negras" };
@@ -19,9 +20,11 @@ class PlayView extends SubView {
     private static final String ERROR_MESSAGE = "Error!!! Formato incorrecto";
     private static final String LOST_MESSAGE = "Derrota!!! No puedes mover tus fichas!!!";
     private String string;
+    
+    private Console console;
 
     PlayView() {
-        super();
+        this.console = new Console();
     }
 
     void interact(PlayController playController) {
