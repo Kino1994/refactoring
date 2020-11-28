@@ -143,7 +143,7 @@ public class IntervalTest {
   
   @Test
   public void givenIntersecteIntervalwhenisIntersectedThenTrue() {
-	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals() + DESVIATION).build();
+	  Interval interval = intervalBuilder.open(-3.0).open(left.getGreater()).build();
 	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
 	  assertTrue(interval.isIntersected(toCheck));
 	  assertTrue(toCheck.isIntersected(interval));
@@ -152,7 +152,7 @@ public class IntervalTest {
   @Test
   public void givenNotIntersecteIntervalwhenisIntersectedThenFalse() {
 	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals()).build();
-	  Interval toCheck = intervalBuilder.open(left.getEquals() + DESVIATION).open(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getGreater()).open(right.getEquals()).build();
 	  assertFalse(interval.isIntersected(toCheck));	 
 	  assertFalse(toCheck.isIntersected(interval));
   }
@@ -175,7 +175,7 @@ public class IntervalTest {
   
   @Test
   public void givenNotIntersecteIntervalInThePointCase2whenisIntersectedThenFalse() {
-	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getEquals() + DESVIATION).build();
+	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getGreater()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
 	  assertFalse(interval.isIntersected(toCheck));
 	  assertFalse(toCheck.isIntersected(interval));
@@ -183,12 +183,28 @@ public class IntervalTest {
   
   @Test
   public void givenIntersecteIntervalInThePointCase2whenisIntersectedThenTrue() {
-	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getEquals() + DESVIATION).build();
+	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getGreater()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
 	  assertTrue(interval.isIntersected(toCheck));
 	  assertTrue(toCheck.isIntersected(interval));
   }
   
+  @Test
+  public void givenPointIntervalwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.closed(right.getEquals()).closed(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.closed(right.getEquals()).closed(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
+  }
+  
+  @Test
+  public void givenNoPointIntervalThenThrowAssertionError() {
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.open(right.getEquals()).open(right.getEquals());
+	  });
+  }
+
+    
   @Test
   public void givenIntervalofAnyTypeWhenBuildAndMinGreaterThanMaxThenAssertionError() {
 	  assertThrows(AssertionError.class, ()-> {
@@ -204,5 +220,5 @@ public class IntervalTest {
 		  intervalBuilder.closed(right.getEquals()).closed(left.getEquals()).build();
 	  });
   }
-
+  
 }
