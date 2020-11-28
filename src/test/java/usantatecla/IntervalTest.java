@@ -12,7 +12,6 @@ public class IntervalTest {
   private Point left = new Point(-2.2);
   private Point right = new Point(4.4);
   private IntervalBuilder intervalBuilder;
-  private static final double DESVIATION = 0.1;
 
   @BeforeEach
   public void before(){
@@ -200,7 +199,7 @@ public class IntervalTest {
   @Test
   public void givenNoPointIntervalThenThrowAssertionError() {
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.open(right.getEquals()).open(right.getEquals());
+		  intervalBuilder.open(right.getEquals()).open(right.getEquals()).build();
 	  });
   }
 

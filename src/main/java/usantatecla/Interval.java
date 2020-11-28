@@ -6,7 +6,7 @@ public class Interval {
 	private Max max;
 
 	public Interval(Min min, Max max) {
-		assert min.value <= max.value;
+		assert min.value < max.value  || (min.value == max.value && min instanceof ClosedMin && max instanceof ClosedMax);
 		this.min = min;
 		this.max = max;
 	}
