@@ -188,5 +188,21 @@ public class IntervalTest {
 	  assertTrue(interval.isIntersected(toCheck));
 	  assertTrue(toCheck.isIntersected(interval));
   }
+  
+  @Test
+  public void givenIntervalofAnyTypeWhenBuildAndMinGreaterThanMaxThenAssertionError() {
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.open(right.getEquals()).open(left.getEquals()).build();
+	  });
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.open(right.getEquals()).closed(left.getEquals()).build();
+	  });
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.closed(right.getEquals()).open(left.getEquals()).build();
+	  });
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.closed(right.getEquals()).closed(left.getEquals()).build();
+	  });
+  }
 
 }
