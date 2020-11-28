@@ -12,6 +12,7 @@ public class IntervalTest {
   private Point left = new Point(-2.2);
   private Point right = new Point(4.4);
   private IntervalBuilder intervalBuilder;
+  private static final double DESVIATION = 0.1;
 
   @BeforeEach
   public void before(){
@@ -79,59 +80,113 @@ public class IntervalTest {
   public void givensameIntervalswhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));	
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalButSecondisClosedwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalButFistisClosedwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalBothAreClosedwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));	 
+	  assertTrue(toCheck.isIntersected(interval));
+
   }
   
   @Test
   public void givensameIntervalsAreBothOpenClosedwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));	
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalsAreBothClosedOpenwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalButFirstisOpenClosedAndSecondisClosedOpenOpenwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
   @Test
   public void givensameIntervalButFirstisClosedOpenAndSecondisOpenClosedwhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
 	  Interval toCheck = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
-	  assertTrue(interval.isIntersected(toCheck));	  
+	  assertTrue(interval.isIntersected(toCheck));	
+	  assertTrue(toCheck.isIntersected(interval));
   }
   
+  @Test
+  public void givenIntersecteIntervalwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals() + DESVIATION).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
+  }
   
+  @Test
+  public void givenNotIntersecteIntervalwhenisIntersectedThenFalse() {
+	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals() + DESVIATION).open(right.getEquals()).build();
+	  assertFalse(interval.isIntersected(toCheck));	 
+	  assertFalse(toCheck.isIntersected(interval));
+  }
   
+  @Test
+  public void givenNotIntersecteIntervalInthePointwhenisIntersectedThenFalse() {
+	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
+	  assertFalse(interval.isIntersected(toCheck));	 
+	  assertFalse(toCheck.isIntersected(interval));
+  }
+  
+  @Test
+  public void givenIntersecteIntervalInThePointwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.open(-3.0).open(left.getEquals()).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
+  }
+  
+  @Test
+  public void givenNotIntersecteIntervalInThePointCase2whenisIntersectedThenFalse() {
+	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getEquals() + DESVIATION).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  assertFalse(interval.isIntersected(toCheck));
+	  assertFalse(toCheck.isIntersected(interval));
+  }
+  
+  @Test
+  public void givenIntersecteIntervalInThePointCase2whenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.open(right.getEquals()).open(right.getEquals() + DESVIATION).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));
+	  assertTrue(toCheck.isIntersected(interval));
+  }
 
 }
