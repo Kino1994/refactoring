@@ -1,6 +1,7 @@
 package usantatecla;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -66,9 +67,12 @@ public class IntervalTest {
     assertFalse(interval.include(right.getGreater()));
   }
   
-  @Test()
+  @Test
   public void givenNullIntervalwhenisIntersectedThrowAssertionError() {
-	  intervalBuilder.build().isIntersected(null);
+	  assertThrows(AssertionError.class, ()->{
+		  intervalBuilder.closed
+			  (left.getEquals()).open(right.getEquals()).build().isIntersected(null);
+	  });
   }
 
 }
