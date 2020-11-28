@@ -89,5 +89,49 @@ public class IntervalTest {
 	  assertTrue(interval.isIntersected(toCheck));	  
   }
   
+  @Test
+  public void givensameIntervalButFistisClosedwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  @Test
+  public void givensameIntervalBothAreClosedwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).closed(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  @Test
+  public void givensameIntervalsAreBothOpenClosedwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  @Test
+  public void givensameIntervalsAreBothClosedOpenwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  @Test
+  public void givensameIntervalButFirstisOpenClosedAndSecondisClosedOpenOpenwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  @Test
+  public void givensameIntervalButFirstisClosedOpenAndSecondisOpenClosedwhenisIntersectedThenTrue() {
+	  Interval interval = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).closed(right.getEquals()).build();
+	  assertTrue(interval.isIntersected(toCheck));	  
+  }
+  
+  
+  
 
 }
