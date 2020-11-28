@@ -38,6 +38,8 @@ public class IntervalBuilder {
 
 	public Interval build() {
     assert this.minConfigured && this.maxConfigured;
+    	this.minConfigured = false;
+		this.maxConfigured = false;
 		return new Interval(this.min, this.max);
 	} 
 

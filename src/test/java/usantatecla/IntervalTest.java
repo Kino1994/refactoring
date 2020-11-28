@@ -78,7 +78,7 @@ public class IntervalTest {
   @Test
   public void givensameIntervalswhenisIntersectedThenTrue() {
 	  Interval interval = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
-	  Interval toCheck = new IntervalBuilder().open(left.getEquals()).open(right.getEquals()).build();
+	  Interval toCheck = intervalBuilder.open(left.getEquals()).open(right.getEquals()).build();
 	  assertTrue(interval.isIntersected(toCheck));	  
   }
 
