@@ -46,23 +46,35 @@ public class BuilderIntervalTest {
   @Test
   public void givenNoPointIntervalThenThrowAssertionError() {
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.open(this.max).open(this.max).build();
+		  intervalBuilder.open(this.max).open(this.max).build(); // (4.4, 4.4) Misconfigured Interval
+	  });
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.open(this.max).closed(this.max).build(); // (4.4, 4.4] Misconfigured Interval
+	  });
+	  assertThrows(AssertionError.class, ()-> {
+		  intervalBuilder.closed(this.max).open(this.max).build();  // [4.4, 4.4) Misconfigured Interval
 	  });
   }
+  
+  @Test
+  public void givenPointIntervalThenOk() {
+	  intervalBuilder.closed(this.max).closed(this.max).build();  // [4.4, 4.4] Point Interval
+  }
+
     
   @Test
   public void givenIntervalofAnyTypeWhenBuildAndMinGreaterThanMaxThenAssertionError() {
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.open(this.max).open(this.min).build();
+		  intervalBuilder.open(this.max).open(this.min).build();  // (4.4, -2.2) Misconfigured Interval
 	  });
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.open(this.max).closed(this.min).build();
+		  intervalBuilder.open(this.max).closed(this.min).build();  // (4.4,- 2.2] Misconfigured Interval
 	  });
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.closed(this.max).open(this.min).build();
+		  intervalBuilder.closed(this.max).open(this.min).build();  // [4.4, -2.2) Misconfigured Interval
 	  });
 	  assertThrows(AssertionError.class, ()-> {
-		  intervalBuilder.closed(this.max).closed(this.min).build();
+		  intervalBuilder.closed(this.max).closed(this.min).build();  // [4.4, -2.2] Misconfigured Interval
 	  });
   }
 
