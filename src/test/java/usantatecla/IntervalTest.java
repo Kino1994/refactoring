@@ -69,9 +69,9 @@ public class IntervalTest {
   
   @Test
   public void givenNullIntervalwhenisIntersectedThrowAssertionError() {
-	  assertThrows(AssertionError.class, ()->{
-		  intervalBuilder.closed
-			  (left.getEquals()).open(right.getEquals()).build().isIntersected(null);
+	  Interval interval = intervalBuilder.closed(left.getEquals()).open(right.getEquals()).build();
+	  assertThrows(AssertionError.class, ()-> {
+		  interval.isIntersected(null);
 	  });
   }
 
