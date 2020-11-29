@@ -16,7 +16,11 @@ class StartView {
 	}
 
 	void interact(StartController startController) {
-	
+		Message.TITTLE.getMessage();
+		int users = new LimitedIntDialog(0, 
+			startController.getMaxPlayers()).read(Message.NUMBER_PLAYERS.toString());
+		startController.setUsers(users);
+		new GameView(startController).write();
 	}
 	
 	void interact() {

@@ -42,7 +42,6 @@ public class StartViewTest {
             when(this.startController.getToken(any(Coordinate.class))).thenReturn(Token.X);
             console.when(Console::getInstance).thenReturn(this.console);
             this.startView.interact(this.startController);
-            verify(this.console).writeln(Message.TITTLE.getMessage());
             verify(this.startController).setUsers(1);
         }
     }
