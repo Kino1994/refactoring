@@ -66,7 +66,7 @@ public class PlayViewTest {
             when(this.playController.isTicTacToe()).thenReturn(true);
             when(this.playController.getToken()).thenReturn(Token.X);
             console.when(Console::getInstance).thenReturn(this.console);
-            this.playView.interact();
+            this.playView.interact(this.playController);
             verify(this.playController).put(coordinate);
             verify(this.console).writeln(Message.PLAYER_WIN.toString());
         }
@@ -84,7 +84,7 @@ public class PlayViewTest {
             when(this.playController.isTicTacToe()).thenReturn(true);
             when(this.playController.getToken()).thenReturn(Token.X);
             console.when(Console::getInstance).thenReturn(this.console);
-            this.playView.interact();
+            this.playView.interact(this.playController);
             verify(this.playController).move(new int[]{0, 0}, new int[]{1, 1});
             verify(this.console).writeln(Message.PLAYER_WIN.toString());
         }
@@ -103,7 +103,7 @@ public class PlayViewTest {
             when(this.playController.isTicTacToe()).thenReturn(true);
             when(this.playController.getToken()).thenReturn(Token.X);
             console.when(Console::getInstance).thenReturn(this.console);
-            this.playView.interact();
+            this.playView.interact(this.playController);
             verify(this.playController).move(origin, target);
             verify(this.console).writeln(Message.PLAYER_WIN.toString());
         }

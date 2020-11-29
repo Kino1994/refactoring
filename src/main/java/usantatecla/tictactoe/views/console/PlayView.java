@@ -14,7 +14,12 @@ class PlayView {
     }
     
     void interact(PlayController playController) {
-    	
+    	if (playController.isUser()) {
+            new PlayMenu(playController).execute();
+        } else {
+            this.randomPlay(playController);
+        }
+        new GameView(playController).write();
     }
 
     void interact() {
