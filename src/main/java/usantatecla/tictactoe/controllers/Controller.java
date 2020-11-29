@@ -8,7 +8,7 @@ public abstract class Controller {
     
     protected Game game;
 
-	Controller(Game game) {
+	public Controller(Game game) {
 		this.game = game;
   }
 

@@ -15,6 +15,10 @@ class Player {
 		this.token = token;
 		this.board = board;
 	}
+	
+	public Player copy(Board board) {
+		return new Player(this.token, board);
+	}
 
 	Error put(Coordinate coordinate) {
 		if (!this.board.isEmpty(coordinate)) {

@@ -1,15 +1,19 @@
 package usantatecla.tictactoe.controllers;
 
+import java.util.Random;
+
 import usantatecla.tictactoe.models.Coordinate;
 import usantatecla.tictactoe.models.Game;
 import usantatecla.tictactoe.models.Session;
-import usantatecla.tictactoe.types.Token;
 import usantatecla.tictactoe.types.Error;
+import usantatecla.tictactoe.types.Token;
 import usantatecla.utils.ClosedInterval;
 
 public class PlayController extends Controller {
 	
 	private Session session = new Session();
+	private UndoController undoController;
+	private RedoController redoController;
 
 	public PlayController(Game game) {
 		super(game);
@@ -39,10 +43,11 @@ public class PlayController extends Controller {
 		return Error.NULL;
 	}
 
-	public int[] getRandomCoordinate() {
-		Coordinate coordinate = new Coordinate();
-		coordinate.random();
-		return new int[] { coordinate.getRow(), coordinate.getColumn() };
+	public Coordinate getRandomCoordinate() {
+		Random random = new Random(System.currentTimeMillis());
+		int row = random.nextInt(Coordinate.DIMENSION);
+		int column = random.nextInt(Coordinate.DIMENSION);
+		return new Coordinate(row,column);
 	}
 
 	public Error put(int[] coordinate) {
@@ -67,6 +72,22 @@ public class PlayController extends Controller {
 			this.session.next();
 		}
 		return error;
+	}
+	
+	public void undo() {
+		this.undoController.undo();
+	}
+
+	public boolean undoable() {
+		return this.undoController.undoable();
+	}
+
+	public void redo() {
+		this.redoController.redo();
+	}
+
+	public boolean redoable() {
+		return this.redoController.redoable();
 	}
 
 }

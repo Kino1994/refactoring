@@ -23,7 +23,7 @@ public class ConsoleView extends usantatecla.tictactoe.views.View {
 
 	@Override
 	protected void play(){
-		this.playView.interact();
+		// this.playView.interact();
 	}
 
 	@Override
