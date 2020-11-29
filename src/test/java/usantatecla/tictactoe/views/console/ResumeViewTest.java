@@ -40,7 +40,7 @@ public class ResumeViewTest {
         try (MockedStatic console = mockStatic(Console.class)) {
             when(this.console.readChar(anyString())).thenReturn('n');
             console.when(Console::getInstance).thenReturn(this.console);
-            assertThat(this.resumeView.interact(), is(false));
+            assertThat(this.resumeView.interact(this.resumeController), is(false));
         }
     }
 
@@ -50,7 +50,7 @@ public class ResumeViewTest {
             when(this.console.readChar(anyString())).thenReturn('y');
             this.resumeController.resume();
             console.when(Console::getInstance).thenReturn(this.console);
-            assertThat(this.resumeView.interact(), is(true));
+            assertThat(this.resumeView.interact(this.resumeController), is(true));
         }
     }
 }
