@@ -12,6 +12,10 @@ class PlayView {
     PlayView(PlayController playController) {
         this.playController = playController;
     }
+    
+    void interact(PlayController playController) {
+    	
+    }
 
     void interact() {
         do {
