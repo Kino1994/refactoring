@@ -15,6 +15,10 @@ class StartView {
 		this.startController = startController;
 	}
 
+	void interact(StartController startController) {
+	
+	}
+	
 	void interact() {
 		Console.getInstance().writeln(Message.TITTLE.toString());
 		int users = new LimitedIntDialog(0, 
