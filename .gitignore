@@ -1,7 +1,10 @@
 HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
+target/
+.mvn/**
+!**/src/main/**/target/
+!**/src/test/**/target/
 !**/src/main/**/build/
 !**/src/test/**/build/
 bin/
@@ -44,7 +47,6 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
-*.travis.*
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
