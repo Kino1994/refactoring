@@ -4,15 +4,9 @@ import usantatecla.tictactoe.controllers.PlayController;
 import usantatecla.tictactoe.models.Coordinate;
 import usantatecla.tictactoe.types.Error;
 
-public class PlayView {
+class PlayView {
 
-    private PlayController playController;
-
-    PlayView(PlayController playController) {
-        this.playController = playController;
-    }
-       
-    public void interact(PlayController playController) {
+    void interact(PlayController playController) {
         if (playController.isUser()) {
             new PlayMenu(playController).execute();
         } else {
@@ -36,6 +30,5 @@ public class PlayView {
             }
         } while (!error.isNull());
     }
-
 
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import usantatecla.tictactoe.controllers.Controller;
+import usantatecla.tictactoe.controllers.UseCaseController;
 import usantatecla.tictactoe.models.Coordinate;
 import usantatecla.tictactoe.types.Token;
 import usantatecla.tictactoe.views.Message;
@@ -27,15 +28,10 @@ public class GameViewTest {
     private Console console;
 
     @Mock
-    private Controller controller;
+    private UseCaseController controller;
 
     @Captor
     private ArgumentCaptor<String> captor;
-
-    @BeforeEach
-    void before() {
-        openMocks(this);
-    }
 
     @Test
     void testGivenNewGameViewWhenWriteThenPrintBoard() {
