@@ -1,19 +1,25 @@
 package usantatecla.tictactoe.controllers;
 
-import usantatecla.tictactoe.models.Game;
+import usantatecla.tictactoe.models.Session;
 
-public class StartController extends Controller {
+public class StartController extends UseCaseController implements AcceptorController {
 
-  public StartController(Game game) {
-    super(game);
-  }
+	  public StartController(Session session) {
+	    super(session);
+	  }
 
-  public void setUsers(int users) {
-    this.game.setUsers(users);
-  }
+	  public void setUsers(int users) {
+	    this.session.setUsers(users);
+	    this.session.next();
+	  }
 
-  public int getMaxPlayers() {
-	return this.game.getMaxPlayers();
-}
+	  public int getMaxPlayers() {
+	    return this.session.getMaxPlayers();
+	  }
+
+	  @Override
+	  public void accept(ControllerVisitor controllerVisitor) {
+	    controllerVisitor.visit(this);
+	  }
 
 }

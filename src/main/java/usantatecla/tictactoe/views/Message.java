@@ -34,5 +34,13 @@ public enum Message {
 	public String toString() {
 		return this.message;
 	}
+	
+	public void write() {
+		Console.getInstance().write(this.message);
+	}
+
+	public void writeln() {
+		Console.getInstance().writeln(this.message);
+	}
 
 }

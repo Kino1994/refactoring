@@ -22,13 +22,4 @@ class StartView {
 		startController.setUsers(users);
 		new GameView(startController).write();
 	}
-	
-	void interact() {
-		Console.getInstance().writeln(Message.TITTLE.toString());
-		int users = new LimitedIntDialog(0, 
-			this.startController.getMaxPlayers()).read(Message.NUMBER_PLAYERS.toString());
-		this.startController.setUsers(users);
-		new GameView(startController).write();
 	}
-
-}
