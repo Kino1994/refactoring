@@ -1,5 +1,12 @@
 package usantatecla.tictactoe.views.console;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,16 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import usantatecla.tictactoe.controllers.ResumeController;
-import usantatecla.tictactoe.models.Game;
-import usantatecla.utils.Console;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
+import usantatecla.tictactoe.controllers.ResumeController;
+import usantatecla.utils.Console;
 
 @ExtendWith(MockitoExtension.class)
 public class ResumeViewTest {
