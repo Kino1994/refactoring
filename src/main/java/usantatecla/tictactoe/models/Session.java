@@ -1,5 +1,6 @@
 package usantatecla.tictactoe.models;
 
+import usantatecla.tictactoe.types.Error;
 import usantatecla.tictactoe.types.Token;
 
 public class Session {
@@ -45,5 +46,20 @@ public class Session {
 	public boolean isUser() {
 		return this.game.isUser();
 	}
+	
+	public Error move(Coordinate origin, Coordinate target) {
+	    Error error = this.game.move(origin, target);
+	    if (error.isNull()){
+	      this.registry.register();
+	    }
+	    return error;
+	  }
+
+	  public void undo() {
+	    this.registry.undo();
+	    if (!this.game.isUser()){
+	      this.registry.undo();
+	    }
+	  }
 
 }
